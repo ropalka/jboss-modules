@@ -87,6 +87,7 @@ com/sun/org/apache/xml/internal/resolver/readers
 com/sun/org/apache/xml/internal/resolver/tools
 com/sun/org/apache/xml/internal/serialize
 com/sun/org/apache/xml/internal/serializer
+com/sun/org/apache/xml/internal/serializer/dom3
 com/sun/org/apache/xml/internal/serializer/utils
 com/sun/org/apache/xml/internal/utils
 com/sun/org/apache/xml/internal/utils/res
