@@ -118,6 +118,7 @@ class LayeredModulePathFactory {
 
     private static class LayersConfig {
 
+        private static final String BASE = "base";
         private static final String DEFAULT_LAYERS_PATH = "system/layers";
         private static final String DEFAULT_ADD_ONS_PATH = "system/add-ons";
 
@@ -130,7 +131,7 @@ class LayeredModulePathFactory {
             configured = false;
             layersPath = DEFAULT_LAYERS_PATH;
             addOnsPath = DEFAULT_ADD_ONS_PATH;
-            layers = Collections.singletonList("base");
+            layers = Collections.singletonList(BASE);
         }
 
         private LayersConfig(Properties properties) {
@@ -142,19 +143,19 @@ class LayeredModulePathFactory {
             addOnsPath = DEFAULT_ADD_ONS_PATH;
             String layersProp = (String) properties.get("layers");
             if (layersProp == null || (layersProp = layersProp.trim()).length() == 0) {
-                layers = Collections.singletonList("base");
+                layers = Collections.singletonList(BASE);
             } else {
                 String[] layerNames = layersProp.split(",");
                 layers = new ArrayList<String>();
                 boolean hasBase = false;
                 for (String layerName : layerNames) {
-                    if ("base".equals(layerName)) {
+                    if (BASE.equals(layerName)) {
                         hasBase = true;
                     }
                     layers.add(layerName);
                 }
                 if (!hasBase) {
-                    layers.add("base");
+                    layers.add(BASE);
                 }
             }
         }
@@ -162,7 +163,6 @@ class LayeredModulePathFactory {
         boolean isConfigured() {
             return configured;
         }
-
 
         String getLayersPath() {
             return layersPath;
