@@ -138,17 +138,11 @@ class LayeredModulePathFactory {
             // Possible future enhancement; probably better to use an xml file
 //            layersPath = properties.getProperty("layers.path", DEFAULT_LAYERS_PATH);
 //            addOnsPath = properties.getProperty("add-ons.path", DEFAULT_ADD_ONS_PATH);
-//            boolean excludeBase = Boolean.valueOf(properties.getProperty("exclude.base.layer", "false"));
             layersPath = DEFAULT_LAYERS_PATH;
             addOnsPath = DEFAULT_ADD_ONS_PATH;
-            boolean excludeBase = false;
             String layersProp = (String) properties.get("layers");
             if (layersProp == null || (layersProp = layersProp.trim()).length() == 0) {
-                if (excludeBase) {
-                    layers = Collections.emptyList();
-                } else {
-                    layers = Collections.singletonList("base");
-                }
+                layers = Collections.singletonList("base");
             } else {
                 String[] layerNames = layersProp.split(",");
                 layers = new ArrayList<String>();
@@ -159,7 +153,7 @@ class LayeredModulePathFactory {
                     }
                     layers.add(layerName);
                 }
-                if (!hasBase && !excludeBase) {
+                if (!hasBase) {
                     layers.add("base");
                 }
             }
