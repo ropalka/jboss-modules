@@ -28,6 +28,15 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
  */
 final class GlobPathFilter implements PathFilter {
+    /**
+     * <ul>
+     *   <li>Group 1 (\\*\\*?) matches one literal asterisk (*) or two literal asterisks (**)</li>
+     *   <li>Group 2 (\\?)     matches a literal question mark (?)</li>
+     *   <li>Group 3 (\\\\.)   matches escaped character (like \*, \?, etc.)</li>
+     *   <li>Group 4 (/+)      matches one or more forward slashes (/)</li>
+     *   <li>Group 5 ([^*?]+)  matches one or more characters that are neither an asterisk (*) nor a question mark (?)</li>
+     * </ul>
+     */
     private static final Pattern GLOB_PATTERN = Pattern.compile("(\\*\\*?)|(\\?)|(\\\\.)|(/+)|([^*?]+)");
 
     private final String glob;
@@ -80,32 +89,32 @@ final class GlobPathFilter implements PathFilter {
             lastWasSlash = false;
             String grp;
             if ((grp = m.group(1)) != null) {
-                // match a * or **
+                // Group 1, see GLOB_PATTERN javadoc
                 if (grp.length() == 2) {
                     // it's a **
-                    patternBuilder.append(".*");
+                    patternBuilder.append(".*"); // match any sequence of characters (including an empty string) except for newlines
                 } else {
                     // it's a *
-                    patternBuilder.append("[^/]*");
+                    patternBuilder.append("[^/]*"); // match a sequence of zero or more characters, none of which are forward slashes
                 }
-            } else if ((grp = m.group(2)) != null) {
-                // match a '?' glob pattern; any non-slash character
-                patternBuilder.append("[^/]");
-            } else if ((grp = m.group(3)) != null) {
-                // backslash-escaped value
-                patternBuilder.append(Pattern.quote(m.group().substring(1)));
-            } else if ((grp = m.group(4)) != null) {
-                // match any number of / chars
-                patternBuilder.append("/+");
+            } else if (m.group(2) != null) {
+                // Group 2, see GLOB_PATTERN javadoc
+                patternBuilder.append("[^/]"); // match exactly one character that is not a forward slash
+            } else if (m.group(3) != null) {
+                // Group 3, see GLOB_PATTERN javadoc
+                patternBuilder.append(Pattern.quote(m.group().substring(1))); // match escaped character literally
+            } else if (m.group(4) != null) {
+                // Group 4, see GLOB_PATTERN javadoc
+                patternBuilder.append("/+"); // match one or more forward slashes
                 lastWasSlash = true;
             } else {
-                // some other string
-                patternBuilder.append(Pattern.quote(m.group()));
+                // Group 5, see GLOB_PATTERN javadoc
+                patternBuilder.append(Pattern.quote(m.group())); // match given group literally
             }
         }
         if (lastWasSlash) {
             // ends in /, append **
-            patternBuilder.append(".*");
+            patternBuilder.append(".*"); // match any sequence of characters (including an empty string) except for newlines
         } else {
             patternBuilder.append("(?:/.*)?");
         }
