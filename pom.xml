@@ -53,7 +53,7 @@
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.org.jboss.bridger>1.6.Final</version.org.jboss.bridger>
         <version.surefire.plugin>3.0.0-M7</version.surefire.plugin>
-        <jdk.min.version>11</jdk.min.version>
+        <jdk.min.version>17</jdk.min.version>
     </properties>
 
     <build>
@@ -124,6 +124,21 @@
                         <configuration>
                             <release>11</release>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- META-INF/services generation from module-info descriptor -->
+            <plugin>
+                <groupId>io.github.dmlloyd.maven</groupId>
+                <artifactId>module-services-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-services</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

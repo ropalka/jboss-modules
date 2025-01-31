@@ -17,9 +17,9 @@
  */
 
 module org.jboss.modules {
-  // for consumers of this module
   requires java.se;
   requires jdk.unsupported;
+
   exports org.jboss.modules;
   exports org.jboss.modules.filter;
   exports org.jboss.modules.log;
@@ -28,6 +28,9 @@ module org.jboss.modules {
   exports org.jboss.modules.ref;
   exports org.jboss.modules.security;
   exports org.jboss.modules.xml;
+
+  provides java.lang.System.LoggerFinder with org.jboss.modules.ModuleLoggerFinder;
+
   uses java.net.URLStreamHandlerFactory;
   uses java.net.spi.URLStreamHandlerProvider;
   uses java.util.logging.LogManager;
